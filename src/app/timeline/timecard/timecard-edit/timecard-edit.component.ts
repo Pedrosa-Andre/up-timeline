@@ -35,10 +35,30 @@ export class TimecardEditComponent implements OnInit, OnDestroy {
     );
   }
 
-  onSave(): void {}
+  onSave(): void {
+    const value = this.form.value;
+    const newTimecard = new Timecard(
+      0,
+      value.title,
+      value.description,
+      value.yearStart,
+      value.monthStart,
+      value.dayStart,
+      value.yearEnd,
+      value.monthEnd,
+      value.dayEnd
+    );
+    if (this.newTimecard) {
+      this.timecardService.addTimecard(newTimecard);
+    } else {
+      this.timecardService.updateTimecard(this.timecard, newTimecard);
+    }
+    this.cancel.emit();
+  }
 
   onDelete(): void {
     this.timecardService.deleteTimecard(this.timecard);
+    this.cancel.emit();
   }
 
   onClose(): void {

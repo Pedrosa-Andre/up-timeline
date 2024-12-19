@@ -16,10 +16,22 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
   constructor(private timecardService: TimecardService) {}
 
+  sortTimecards(timecards: Timecard[]): Timecard[] {
+    return timecards.sort((a, b) => {
+      if (a.yearStart !== b.yearStart) {
+        return a.yearStart - b.yearStart;
+      }
+      if ((a.monthStart || 0) !== (b.monthStart || 0)) {
+        return (a.monthStart || 0) - (b.monthStart || 0);
+      }
+      return (a.dayStart || 0) - (b.dayStart || 0);
+    });
+  }
+
   ngOnInit(): void {
     this.subscriptionChange =
       this.timecardService.timecardChangedEvent.subscribe((timecards) => {
-        this.timecards = timecards;
+        this.timecards = this.sortTimecards(timecards);
       });
     this.subscriptionSelect =
       this.timecardService.timecardSelectedEvent.subscribe((data) => {

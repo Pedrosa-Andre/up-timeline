@@ -14,7 +14,7 @@ export class TimecardService {
   maxTimecardId: number;
 
   constructor(private http: HttpClient) {
-    this.getTimecards(); // TODO: Is it indeed needed?
+    this.getTimecards();
   }
 
   getTimecards(): Timecard[] {
@@ -27,11 +27,6 @@ export class TimecardService {
         this.timecards = responseData.timecards || [];
         const ids = this.timecards.map((timecard) => timecard.id);
         this.maxTimecardId = Math.max(...ids, 0);
-        this.timecards.sort((a, b) => {
-          if (a.id < b.id) return -1;
-          if (a.id > b.id) return 1;
-          return 0;
-        });
         this.timecardChangedEvent.next(this.timecards.slice());
       },
       (error: any) => {
