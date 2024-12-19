@@ -1,0 +1,46 @@
+<!-- timecard.component.html -->
+
+<div class="card shadow-sm mb-4">
+  <div class="card-body">
+    <!-- Dates -->
+    <div class="d-flex align-items-center mb-2">
+      <!-- Start Date -->
+      <div *ngIf="timecard.yearStart">
+        <span>
+          {{
+            formatDate(
+              timecard.yearStart,
+              timecard.monthStart,
+              timecard.dayStart
+            )
+          }}
+        </span>
+      </div>
+
+      <!-- End Date -->
+      <div *ngIf="timecard.yearEnd">
+        <span class="mx-2">-</span>
+      </div>
+      <div *ngIf="timecard.yearEnd">
+        <span>
+          {{ formatDate(timecard.yearEnd, timecard.monthEnd, timecard.dayEnd) }}
+        </span>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-between">
+      <div>
+        <!-- Title -->
+        <h5 class="text-primary mb-2">{{ timecard.title }}</h5>
+
+        <!-- Description -->
+        <p *ngIf="timecard.description" class="card-text text-muted mb-0">
+          {{ timecard.description }}
+        </p>
+      </div>
+      <div class="mt-auto">
+        <button (click)="onEdit(timecard)" class="btn btn-primary">Edit</button>
+      </div>
+    </div>
+  </div>
+</div>

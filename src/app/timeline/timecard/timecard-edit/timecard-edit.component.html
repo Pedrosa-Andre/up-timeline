@@ -1,0 +1,151 @@
+<!-- timecard-edit.component.html -->
+
+<!-- Modal Overlay -->
+<div
+  class="modal fade show d-block"
+  tabindex="-1"
+  role="dialog"
+  (click)="onClose()"
+  id="editModal"
+>
+  <div
+    class="modal-dialog modal-lg modal-dialog-centered"
+    role="document"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h5 *ngIf="!newTimecard" class="modal-title">Edit Timecard</h5>
+        <h5 *ngIf="newTimecard" class="modal-title">New Timecard</h5>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="onClose()"
+        ></button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <form #editForm="ngForm">
+          <!-- Title Input -->
+          <div class="mb-3">
+            <label for="title" class="form-label">Title*</label>
+            <input
+              type="text"
+              id="title"
+              class="form-control required"
+              [(ngModel)]="timecard.title"
+              name="title"
+              required
+              #titleField="ngModel"
+              [ngClass]="{ 'is-invalid': titleField.invalid && titleField.touched }"
+            />
+          </div>
+
+          <!-- Description Input -->
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea
+              id="description"
+              class="form-control"
+              [(ngModel)]="timecard.description"
+              name="description"
+              rows="3"
+            ></textarea>
+          </div>
+
+          <!-- Start Date Inputs -->
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <label for="yearStart" class="form-label">Start Year*</label>
+              <input
+                type="number"
+                id="yearStart"
+                class="form-control required"
+                [(ngModel)]="timecard.yearStart"
+                name="yearStart"
+                required
+                #startYearField="ngModel"
+                [ngClass]="{ 'is-invalid': startYearField.invalid && startYearField.touched }"
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="monthStart" class="form-label">Start Month</label>
+              <input
+                type="number"
+                id="monthStart"
+                class="form-control"
+                [(ngModel)]="timecard.monthStart"
+                name="monthStart"
+                min="1"
+                max="12"
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="dayStart" class="form-label">Start Day</label>
+              <input
+                type="number"
+                id="dayStart"
+                class="form-control"
+                [(ngModel)]="timecard.dayStart"
+                name="dayStart"
+                min="1"
+                max="31"
+              />
+            </div>
+          </div>
+
+          <!-- End Date Inputs -->
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <label for="yearEnd" class="form-label">End Year</label>
+              <input
+                type="number"
+                id="yearEnd"
+                class="form-control"
+                [(ngModel)]="timecard.yearEnd"
+                name="yearEnd"
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="monthEnd" class="form-label">End Month</label>
+              <input
+                type="number"
+                id="monthEnd"
+                class="form-control"
+                [(ngModel)]="timecard.monthEnd"
+                name="monthEnd"
+                min="1"
+                max="12"
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="dayEnd" class="form-label">End Day</label>
+              <input
+                type="number"
+                id="dayEnd"
+                class="form-control"
+                [(ngModel)]="timecard.dayEnd"
+                name="dayEnd"
+                min="1"
+                max="31"
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button class="btn btn-success" (click)="onSave()">Save</button>
+        <button class="btn btn-secondary" (click)="onClose()">Cancel</button>
+        <button class="btn btn-danger" (click)="onDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Gray Transparent Overlay -->
+<div class="modal-backdrop fade show"></div>

@@ -1,0 +1,14 @@
+/* Prevent scrolling behind modal */
+body.modal-open {
+  overflow: hidden;
+}
+
+/* Custom styles for modal backdrop */
+.modal-backdrop.show {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Ensure modal visibility */
+.modal.fade.show {
+  display: block;
+}

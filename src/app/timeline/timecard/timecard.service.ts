@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Timecard } from './timecard.model';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TimecardService {
   timecards: Timecard[] = [];
-  timecardSelectedEvent = new Subject<Timecard>();
+  timecardSelectedEvent = new BehaviorSubject<{timecard: Timecard | null, new: boolean}>({timecard: null, new: false});
   timecardChangedEvent = new Subject<Timecard[]>();
   maxTimecardId: number;
 
@@ -25,7 +25,7 @@ export class TimecardService {
         error?: string;
       }) => {
         this.timecards = responseData.timecards || [];
-        const ids = this.timecards.map(timecard => timecard.id);
+        const ids = this.timecards.map((timecard) => timecard.id);
         this.maxTimecardId = Math.max(...ids, 0);
         this.timecards.sort((a, b) => {
           if (a.id < b.id) return -1;
@@ -51,21 +51,17 @@ export class TimecardService {
       return;
     }
 
-    this.http
-      .delete(`http://localhost:3000/timecards/11`)
-      .subscribe(
-        () => {
-          // Remove from local cache only on success
-          this.timecards = this.timecards.filter(
-            (doc) => doc.id !== timecard.id
-          );
-          this.timecardChangedEvent.next(this.timecards.slice());
-          console.log('Timecard deleted successfully');
-        },
-        (error: any) => {
-          console.error('Error deleting timecard', error);
-        }
-      );
+    this.http.delete(`http://localhost:3000/timecards/${timecard.id}`).subscribe(
+      () => {
+        // Remove from local cache only on success
+        this.timecards = this.timecards.filter((doc) => doc.id !== timecard.id);
+        this.timecardChangedEvent.next(this.timecards.slice());
+        console.log('Timecard deleted successfully');
+      },
+      (error: any) => {
+        console.error('Error deleting timecard', error);
+      }
+    );
   }
 
   addTimecard(newTimecard: Timecard) {
@@ -74,7 +70,7 @@ export class TimecardService {
     }
 
     this.maxTimecardId++;
-    const timecardToAdd = { ...newTimecard, id: this.maxTimecardId }
+    const timecardToAdd = { ...newTimecard, id: this.maxTimecardId };
 
     this.http.post('http://localhost:3000/timecards', timecardToAdd).subscribe(
       (responseData: {
